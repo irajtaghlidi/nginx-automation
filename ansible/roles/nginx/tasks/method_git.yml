@@ -21,11 +21,6 @@
     chdir: '{{ source_path }}'
 
 
-- name: make dirs
-  file:
-    path: /var/lib/nginx
-    state: directory
-
 - name: make
   become: yes
   command: make
@@ -56,5 +51,15 @@
   loop:
     - { path: /etc/nginx/conf.d/ }
     - { path: /etc/nginx/sites-enabled/ }
+    - { path: /var/lib/nginx }
+    - { path: /var/www/html }
   loop_control:
     label: "{{ item.path }}"
+
+
+- name: copy default webpage
+  copy:
+    src: "{{ source_path }}/docs/html/index.html"
+    dest: /var/www/html/index.html
+    remote_src: yes
+
