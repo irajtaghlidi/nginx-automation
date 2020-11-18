@@ -1,21 +1,4 @@
 ---
-# - name: generate SSH key
-#   hosts: 127.0.0.1
-#   connection: local
-
-#   tasks:
-#     - name: generate SSH key id_rsa_user
-#       openssh_keypair:
-#         path: "../keypairs/id_rsa_user"
-#         type: rsa
-#         size: 4096
-#         state: present
-#         force: no
-
-#     - name: Creat Infrastructure with Terraform, 'terraform apply'
-#       terraform:
-#         project_path: "../terraform/"
-#         state: present
 
 - name: Installing Nginx service in Ubuntu machine.
   hosts: all
