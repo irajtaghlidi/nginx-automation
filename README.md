@@ -19,14 +19,26 @@ Now change directory to the Terraform location.
 ## Configure
 ### Infrastructiore
 Terraform automatically read `terraform.tfvars` file to use variables inside it, So rename the `terraform.tfvars.example` template file to `terraform.tfvars` and open it with a text editor.
+
+``` cp terraform.tfvars.example terraform.tfvars ```
+
+
 Here we should configure our AWS API keys, and select a valid public and private keys, these keys will be use for the EC2 Key-pair resource and Ansible. Also, we can customize desired region and other variables like VPC and subnet IP ranges in this file.
 
 Suggestion: Create a new IAM user with limited permissions and create a access key for that.
  
  ### Nginx Service
- Nginx package version and GIT revision/commit hash value are configurable in Nginx Role variable file located at `ansible/roles/nginx/vars/main.yml`.
+ Nginx package version and GIT revision/commit hash value are configurable in Nginx Role variable file located at `ansible/roles/nginx/vars/main.yml` from root directory.
+ 
+ ```
+ vim `../ansible/roles/nginx/vars/main.yml`
+ ``` 
  
  ## Create Infrastructure and Configure service
+ First we need to initialize Terraform to download required modules and provider files.
+ 
+ ``` terraform init ```
+ 
  To start creating infrastructures run these commands in `terraform` directory.
  
  ``` terraform plan ```
@@ -92,3 +104,9 @@ Ansible has a decrative strategy so when it show his task results in green text 
     ├── terraform.tfvars.example
     └── variables.tf
 ```
+
+## Final
+
+The final url is returned by `terraform apply` command, so we just open it in browser.
+
+Did you see the custom header in response packet? ;)
