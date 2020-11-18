@@ -1,0 +1,60 @@
+- name: fetch via GIT
+  git:
+    repo: 'https://github.com/nginx/nginx.git'
+    dest: '{{ source_path }}'
+    version: '{{ git_version }}'
+
+- name: Install build dependencies
+  package:
+    name:
+      - build-essential
+      - libpcre3-dev
+      - libssl-dev
+      - zlib1g-dev
+      - libxslt-dev
+      - libgd-dev
+
+
+- name: Configure
+  command: ./auto/configure {{ build_options }}
+  args:
+    chdir: '{{ source_path }}'
+
+
+- name: make dirs
+  file:
+    path: /var/lib/nginx
+    state: directory
+
+- name: make
+  become: yes
+  command: make
+  args:
+    chdir: '{{ source_path }}'
+
+
+- name: Make install
+  command: make install
+  args:
+    chdir: '{{ source_path }}'
+
+
+- name: create Systemd file
+  copy:
+    src: "{{ role_path }}/files/nginx.service"
+    dest: /etc/systemd/system/nginx.service
+
+
+- name: Systemd daemon reload
+  command: systemctl daemon-reload
+
+
+- name: create config directories
+  file:
+    path: '{{ item.path }}'
+    state: directory
+  loop:
+    - { path: /etc/nginx/conf.d/ }
+    - { path: /etc/nginx/sites-enabled/ }
+  loop_control:
+    label: "{{ item.path }}"

@@ -1,0 +1,24 @@
+- name: check installation method {{ method }}
+  import_tasks: method_{{ method }}.yml
+  when: method == "package" or method == "git"
+
+
+- name: Overwite Nginx Configs
+  copy:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+  loop:
+    - { src: '{{ role_path }}/files/nginx.conf', dest: '/etc/nginx/nginx.conf' }
+    - { src: '{{ role_path }}/files/default.sites', dest: '/etc/nginx/sites-enabled/default' }
+  loop_control:
+    label: "{{ item.dest }}"
+
+
+
+- name: restart and enable service
+  service:
+    name: nginx
+    state: restarted
+    enabled: yes
+
+
