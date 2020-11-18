@@ -1,0 +1,58 @@
+
+- name: TESTINT
+  hosts: all
+  become: true
+  become_user: root
+  become_method: sudo
+
+  tasks:
+    - name: execute service_facts
+      service_facts:
+
+
+    - name: Is Nginx installed?
+      fail:
+        msg: nginx is not exist.
+      when: "'nginx' not in services"
+
+    # actually, if the service does not be running, this task will be failed
+    - name: check Nignx service status
+      command: service nginx status
+      args:
+        warn: no
+
+
+    - block:
+      - include_vars: "roles/nginx/vars/main.yml"
+      - name: get GIT status
+        command: git status
+        args:
+          chdir: '{{ source_path }}'
+        when: method == 'git'
+        register: git_status
+      - name: check cloned GIT revision
+        fail:
+          msg: different GIT revision {{ git_version }}
+        when:
+          - method == 'git'
+          - git_status.stdout.find(git_version) == -1
+
+      - name: get the package facts
+        package_facts:
+          manager: "auto"
+        register: package_status
+        when: method == 'package'
+      - name: check missmatch nginx version
+        fail:
+          msg: Installed package version is not correct, {{ ansible_facts.packages.nginx[0].version }} !=  {{ package_version }}
+        ignore_errors: yes
+        when:
+          - method == 'package'
+          - package_version != ansible_facts.packages.nginx[0].version
+
+
+    - name: check Nginx configuration
+      command: nginx -t
+
+    - name: check if httpd has port 80 open
+      shell: ss -tp state listening sport = :80 | grep nginx
