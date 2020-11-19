@@ -1,14 +1,16 @@
 # Nginx deployment automation with Terraform and Ansible in AWS.
 
-In this project we create a EC2 instance and other required networking resources in AWS cloud. Instance IP address that required by Ansible to configuring service will be store in `inventory` file in `ansible` directory by Terraform, in the last step ansible-playbook trigered to start the service configuration process.
+In this project, we create an EC2 instance and other required networking resources in the AWS cloud. Instance IP address required by Ansible to configuring the service will be store in the `inventory` file in the `ansible` directory by Terraform, in the last step ansible-playbook triggered to start the service configuration process.
 
-Ansible provide two installation method, from APT package management and public Nginx GIT repository. It's possible to configure installation method both from Ansible and Terraform CLI command.
+Ansible provides two installation method, from APT package management and public Nginx GIT repository. It's possible to configure the installation method both from Ansible and Terraform CLI command (`package` and `git` as value).
 
 ## Diagram
 ![](docs/statics/diagram.png)
 
 ## Let's go!
-First step is clone the project.
+First Install [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#) and [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) CLI on your system.
+
+Clone the repository.
  
 ``` git clone https://github.com/irajtaghlidi/nginx-automation.git ```
 
@@ -23,19 +25,19 @@ Terraform automatically read `terraform.tfvars` file to use variables inside it,
 ``` cp terraform.tfvars.example terraform.tfvars ```
 
 
-Here we should configure our AWS API keys, and select a valid public and private keys, these keys will be use for the EC2 Key-pair resource and Ansible. Also, we can customize desired region and other variables like VPC and subnet IP ranges in this file.
+Here we should configure our AWS API keys, and select a valid public and private key, these keys will be use for the EC2 Key-pair resource and Ansible. Also, we can customize desired region and other variables like VPC and subnet IP ranges in this file.
 
-Suggestion: Create a new IAM user with limited permissions and create a access key for that.
+Suggestion: Create a new IAM user with limited permissions and create an access key for it.
  
  ### Nginx Service
- Nginx package version and GIT revision/commit hash value are configurable in Nginx Role variable file located at `ansible/roles/nginx/vars/main.yml` from root directory.
+ Nginx package version and GIT revision/commit hash value are configurable in Nginx Role variable file located at `ansible/roles/nginx/vars/main.yml` from the root directory.
  
  ```
  vim `../ansible/roles/nginx/vars/main.yml`
  ``` 
  
  ## Create Infrastructure and Configure service
- First we need to initialize Terraform to download required modules and provider files.
+ First, we need to initialize Terraform to download the required module and provider files.
  
  ``` terraform init ```
  
@@ -45,12 +47,12 @@ Suggestion: Create a new IAM user with limited permissions and create a access k
  
  ``` terraform apply ```
  
- After performing the last step, the server IP address is stored in a `inventory` file in `ansible` root directory and trigger `ansible-playbook` to execute all configuration to setting up the Nginx service.
+ After performing the last step, the server IP address is stored in a `inventory` file in `ansible` root directory and trigger `ansible-playbook` to execute all configuration to set up the Nginx service.
 
 
 ## Choose installation method
 
-The installation method of Nignx can be set with `installation_method` variable inside `terraform.tfvars` file. It can be overwite via Command Line at run-time also.
+The installation method of Nignx can be set with `installation_method` variable inside `terraform.tfvars` file. It can be overwritten via Command Line at run-time also.
 
 For example to set GIT as installation method:
 
@@ -63,7 +65,7 @@ For example to set GIT as installation method:
 ![](docs/statics/terraform-apply.gif)
 
 ### Test
-Ansible has a decrative strategy so when it show his task results in green text with final stats without errors, so it means everything is working as expected. But we can run a separated playbook to check each steps with different method to ensure everthing is working.
+Ansible has a declarative strategy so when it shows its task results in green text with final stats with no errors, so it means everything is working as expected. But we can run a separate playbook to check each step with a different method to ensure everything is working.
 
 * From root of project:
 
@@ -107,6 +109,6 @@ Ansible has a decrative strategy so when it show his task results in green text 
 
 ## Final
 
-The final url is returned by `terraform apply` command, so we just open it in browser.
+The final URL is returned by `terraform apply` command, so we just open it in the browser.
 
-Did you see the custom header in response packet? ;)
+Did you see the custom header in the response packet? ;)
