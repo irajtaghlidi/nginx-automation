@@ -12,17 +12,23 @@ First Install [Ansible](https://docs.ansible.com/ansible/latest/installation_gui
 
 Clone the repository.
  
-``` git clone https://github.com/irajtaghlidi/nginx-automation.git ```
+```
+git clone https://github.com/irajtaghlidi/nginx-automation.git
+```
 
 Now change directory to the Terraform location.
  
-``` cd nginx-automation/terraform ```
+```
+cd nginx-automation/terraform
+```
 
 ## Configure
 ### Infrastructiore
 Terraform automatically read `terraform.tfvars` file to use variables inside it, So rename the `terraform.tfvars.example` template file to `terraform.tfvars` and open it with a text editor.
 
-``` cp terraform.tfvars.example terraform.tfvars ```
+```
+cp terraform.tfvars.example terraform.tfvars
+```
 
 
 Here we should configure our AWS API keys, and select a valid public and private key, these keys will be use for the EC2 Key-pair resource and Ansible. Also, we can customize desired region and other variables like VPC and subnet IP ranges in this file.
@@ -39,13 +45,19 @@ Suggestion: Create a new IAM user with limited permissions and create an access 
  ## Create Infrastructure and Configure service
  First, we need to initialize Terraform to download the required module and provider files.
  
- ``` terraform init ```
+ ```
+ terraform init
+ ```
  
  To start creating infrastructures run these commands in `terraform` directory.
  
- ``` terraform plan ```
+ ```
+ terraform plan
+ ```
  
- ``` terraform apply ```
+ ```
+ terraform apply
+ ```
  
  After performing the last step, the server IP address is stored in a `inventory` file in `ansible` root directory and trigger `ansible-playbook` to execute all configuration to set up the Nginx service.
 
@@ -56,7 +68,9 @@ The installation method of Nignx can be set with `installation_method` variable 
 
 For example to set GIT as installation method:
 
-```terraform apply -var="installation_method=git"```
+```
+terraform apply -var="installation_method=git"
+```
 
 ** Terraform pass this variable to `ansible-playbook` via command-line variable like: `-e="method=git"`.
 
@@ -67,11 +81,15 @@ For example to set GIT as installation method:
 ### Test
 Ansible has a declarative strategy so when it shows its task results in green text with final stats with no errors, so it means everything is working as expected. But we can run a separate playbook to check each step with a different method to ensure everything is working.
 
-* From root of project:
+From root of repository:
 
-```cd ansible```
+```
+cd ansible
+```
 
-```ansible-playbook -e="method=git" test.yml```
+```
+ansible-playbook -e="method=git" test.yml
+```
 
 
 ### Directory structure
