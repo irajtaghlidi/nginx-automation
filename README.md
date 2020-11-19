@@ -22,16 +22,16 @@ Now change directory to the Terraform location.
 cd nginx-automation/terraform
 ```
 
-## Configure
-### Infrastructiore
+## Configuration
+### Infrastructure
 Terraform automatically read `terraform.tfvars` file to use variables inside it, So rename the `terraform.tfvars.example` template file to `terraform.tfvars` and open it with a text editor.
 
 ```
-cp terraform.tfvars.example terraform.tfvars
+cp terraform.tfvars.example terraform.tfvars && vim terraform.tfvars
 ```
 
 
-Here we should configure our AWS API keys, and select a valid public and private key, these keys will be use for the EC2 Key-pair resource and Ansible. Also, we can customize desired region and other variables like VPC and subnet IP ranges in this file.
+Here we should configure our AWS API keys, and select a valid public and private key, these keys will be used for the EC2 Key-pair resource and Ansible. Also, we can customize the desired region and other variables like VPC and subnet IP ranges in this file.
 
 Suggestion: Create a new IAM user with limited permissions and create an access key for it.
  
@@ -39,7 +39,7 @@ Suggestion: Create a new IAM user with limited permissions and create an access 
  Nginx package version and GIT revision/commit hash value are configurable in Nginx Role variable file located at `ansible/roles/nginx/vars/main.yml` from the root directory.
  
  ```
- vim `../ansible/roles/nginx/vars/main.yml`
+ vim ../ansible/roles/nginx/vars/main.yml
  ``` 
  
  ## Create Infrastructure and Configure service
@@ -59,10 +59,10 @@ Suggestion: Create a new IAM user with limited permissions and create an access 
  terraform apply
  ```
  
- After performing the last step, the server IP address is stored in a `inventory` file in `ansible` root directory and trigger `ansible-playbook` to execute all configuration to set up the Nginx service.
+ After performing the last step, the server IP address is stored in an `inventory` file in `ansible` root directory and trigger `ansible-playbook` to execute all configuration to set up the Nginx service.
 
 
-## Choose installation method
+## Choose the installation method
 
 The installation method of Nignx can be set with `installation_method` variable inside `terraform.tfvars` file. It can be overwritten via Command Line at run-time also.
 
